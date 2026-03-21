@@ -1,0 +1,4 @@
+# Ignores output budgets
+*.xlsx
+# Ignore whats in credit statement directory
+/credit_statements/*
