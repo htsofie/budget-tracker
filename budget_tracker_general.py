@@ -29,7 +29,7 @@ except ImportError:
     xlrd = None
 
 
-# ?? Default categories ????????????????????????????????????????????
+# -- Default categories --------------------------------------------
 
 DEFAULT_CATEGORIES = [
     "Transportation",
@@ -289,7 +289,7 @@ def parse_amex_date(text):
 
 def parse_amex_xls(path):
     if xlrd is None:
-        print(f"  Skipping {path} — xlrd not installed. Run: pip install xlrd")
+        print(f"  Skipping {path} â€” xlrd not installed. Run: pip install xlrd")
         return []
 
     wb = xlrd.open_workbook(path)
@@ -409,7 +409,7 @@ def print_summary(label, income, savings_contribution, totals, savings):
 
     w = 58
     print(f"\n{'=' * w}")
-    print(f"   BUDGET SUMMARY  —  {label}")
+    print(f"   BUDGET SUMMARY  â€”  {label}")
     print(f"{'=' * w}")
 
     print(f"\n   INCOME")
@@ -427,7 +427,7 @@ def print_summary(label, income, savings_contribution, totals, savings):
     print(f"\n   EXPENSES")
     for cat in categories:
         print(f"     {cat:<26} ${totals.get(cat, 0):>10,.2f}")
-    print(f"     {'?' * 40}")
+    print(f"     {'-' * 40}")
     print(f"     {'Total':<26} ${total_exp:>10,.2f}")
 
     print(f"\n   LEFTOVER")
@@ -459,7 +459,7 @@ def build_excel(path, label, income, savings_contribution, totals, savings, txns
     ws.column_dimensions["B"].width = 18
 
     r = 1
-    ws.cell(r, 1, f"Monthly Budget — {label}").font = Font(bold=True, size=14)
+    ws.cell(r, 1, f"Monthly Budget â€” {label}").font = Font(bold=True, size=14)
 
     r = 3
     ws.cell(r, 1, "INCOME").font = section
