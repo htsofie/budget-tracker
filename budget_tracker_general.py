@@ -400,12 +400,8 @@ def calc_savings(cfg, monthly_contribution):
 def print_summary(label, income, savings_contribution, totals, savings):
     categories = DEFAULT_CATEGORIES
     total_exp = sum(totals.values())
-    essential = (totals.get("Fixed Costs", 0)
-                + totals.get("Transportation", 0)
-                + totals.get("Other Necessary", 0))
-    available = income - essential - savings_contribution
-    food_fun = totals.get("Food", 0) + totals.get("Discretionary/Fun", 0)
-    remaining = available - food_fun
+    # Cash left after savings and all categorized card spending (same as income - savings - total_exp).
+    remaining = income - savings_contribution - total_exp
 
     w = 58
     print(f"\n{'=' * w}")
@@ -431,15 +427,12 @@ def print_summary(label, income, savings_contribution, totals, savings):
     print(f"     {'Total':<26} ${total_exp:>10,.2f}")
 
     print(f"\n   LEFTOVER")
-    print(f"     Available Fun Money   ${available:>10,.2f}")
-    print(f"       (Income - Fixed - Transport - Other Nec. - Savings)")
-    print(f"     Spent (Food + Fun)    ${food_fun:>10,.2f}")
     print(f"     Remaining             ${remaining:>10,.2f}")
     if remaining < 0:
         print(f"     !! Over budget this month")
     print(f"\n{'=' * w}")
 
-    return {"available": round(available, 2), "remaining": round(remaining, 2)}
+    return {"remaining": round(remaining, 2)}
 
 
 # ?? Excel output ??????????????????????????????????????????????????
@@ -494,17 +487,9 @@ def build_excel(path, label, income, savings_contribution, totals, savings, txns
     c = ws.cell(r, 2, total_exp); c.number_format = cur; c.font = bold
 
     r += 2
-    ws.cell(r, 1, "BUDGET OVERVIEW").font = section
+    ws.cell(r, 1, "LEFTOVER").font = section
     r += 1
-    ws.cell(r, 1, "Available Fun Money"); ws.cell(r, 2, leftover["available"]).number_format = cur
-    r += 1
-    ws.cell(r, 1, "  (Income - Fixed - Transport - Other Nec. - Savings)")
-    r += 1
-    ws.cell(r, 1, "Spent on Food"); ws.cell(r, 2, totals.get("Food", 0)).number_format = cur
-    r += 1
-    ws.cell(r, 1, "Spent on Discretionary/Fun"); ws.cell(r, 2, totals.get("Discretionary/Fun", 0)).number_format = cur
-    r += 1
-    ws.cell(r, 1, "Remaining").font = bold
+    ws.cell(r, 1, "Remaining (income - savings - total expenses)").font = bold
     c = ws.cell(r, 2, leftover["remaining"]); c.number_format = cur; c.font = bold
     if leftover["remaining"] < 0:
         c.font = Font(bold=True, color="FF0000")
